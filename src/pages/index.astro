@@ -1,386 +1,165 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import { getCollection } from 'astro:content';
-
-const allResearch = await getCollection('research', ({ data }) => !data.draft);
-const allThoughts = await getCollection('thoughts', ({ data }) => !data.draft);
-
-const sortedResearch = allResearch.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const sortedThoughts = allThoughts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const featuredResearch = sortedResearch.filter(r => r.data.featured);
-
-// Topic tag frequencies
-const tagMap = new Map<string, number>();
-[...allResearch, ...allThoughts].forEach((item) => {
-  item.data.tags.forEach((tag) => {
-    const formatted = tag.trim();
-    tagMap.set(formatted, (tagMap.get(formatted) || 0) + 1);
-  });
-});
-const sortedTags = Array.from(tagMap.entries()).sort((a, b) => b[1] - a[1]);
+const description = 'Interfaces with intention. Software with substance. Design, development, and independent thinking by funtohard.';
 ---
-
-<BaseLayout title="Philosophy Research, Epistemology & Formal Dialectics">
-  <!-- Hero Masthead Section -->
-  <section class="pt-8 pb-12 text-center border-b border-[var(--border-subtle)] mb-12">
-    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-sans font-medium bg-[var(--tag-bg)] text-[var(--accent-primary)] border border-[var(--tag-border)] mb-6 animate-fadeIn">
-      <span class="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse"></span>
-      <span>Epistemology • Symbolic Logic • Philosophy of Mind • Ethics</span>
-    </div>
-
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold text-[var(--text-primary)] tracking-tight leading-[1.12] max-w-3xl mx-auto mb-6">
-      Philosophical Inquiries &amp; Formal Dialectics
-    </h1>
-
-    <p class="text-lg sm:text-xl font-sans text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed mb-8">
-      A digital research journal dedicated to formal modal calculus, epistemological paradoxes, synthetic cognitive architectures, and classical philosophy.
-    </p>
-
-    <!-- Quick Navigation Actions -->
-    <div class="flex flex-wrap justify-center gap-3.5 font-sans text-xs sm:text-sm">
-      <a
-        href="/research"
-        class="px-6 py-3 rounded-xl bg-[var(--accent-primary)] text-gray-950 font-bold hover:brightness-110 transition shadow-lg shadow-amber-500/15 flex items-center gap-2"
-      >
-        <span>Explore Research Papers</span>
-      </a>
-      <a
-        href="/thoughts"
-        class="px-6 py-3 rounded-xl bg-[var(--bg-surface)] text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-surface-elevated)] transition border border-[var(--border-subtle)] hover:border-[var(--border-accent)] flex items-center gap-2"
-      >
-        <span>Read Thoughts Stream</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- Signature Interactive Feature: The Epistemic Dialectic Oracle -->
-  <section class="mb-16">
-    <div class="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-xl relative overflow-hidden">
-      <!-- Background Ambient Geometric Accent -->
-      <div class="absolute -right-12 -bottom-12 w-64 h-64 rounded-full bg-[var(--accent-subtle)] opacity-40 blur-3xl pointer-events-none"></div>
-
-      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap border-b border-[var(--border-subtle)] pb-4">
-        <div class="flex items-center gap-2.5">
-          <div>
-            <h2 class="text-base sm:text-lg font-serif font-bold text-[var(--text-primary)]">
-              The Epistemic Dialectic Oracle
-            </h2>
-            <p class="text-xs font-sans text-[var(--text-muted)]">
-              Interactive philosophical axioms, thought experiments &amp; paradoxes
-            </p>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>funtohard — Design &amp; Development</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.site} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles/editorial.css" />
+    <link rel="preload" href="/fonts/editorial-2.ttf" as="font" type="font/ttf" crossorigin />
+    <meta property="og:title" content="funtohard — Design & Development" />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.site} />
+    <meta name="theme-color" content="#fdfcfb" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="folio">
+      <header class="site-header">
+        <a href="/" class="wordmark" aria-label="funtohard home"><span class="monogram" aria-hidden="true">f.</span><span>funtohard</span></a>
+        <nav aria-label="Main navigation"><a href="/work/">Work</a><a href="/philosophy/">Thinking</a><a href="https://github.com/FunToHard">GitHub <img class="folio-icon" src="/icons/arrow-up-right.svg" alt="" /></a></nav>
+      </header>
+      <aside class="page-index" aria-label="On this page">
+        <a href="#work"><span>01</span>Work</a><a href="#process"><span>02</span>Process</a><a href="#thinking"><span>03</span>Thinking</a>
+      </aside>
+      <main id="main">
+        <section class="hero" aria-labelledby="headline">
+          <p class="eyebrow hero-label">Design + software development</p>
+          <div class="hero-grid">
+            <h1 id="headline"><span><em>Nothing</em> here</span><span><em class="accent">is</em> accidental.</span></h1>
+            <div class="intro-copy"><p>I'm funtohard. I design interfaces<br class="desktop-break" /> and develop software.<br />A collection of what I build, how I think,<br class="desktop-break" /> and the questions that shape my work.</p><a class="text-link" href="/work/">Inspect the work <img class="folio-icon" src="/icons/arrow-right.svg" alt="" /></a><div class="mode-control"><span>View</span><button type="button" id="inspect-toggle" aria-pressed="false">Read <span aria-hidden="true">/</span> Inspect</button></div></div>
           </div>
-        </div>
-
-        <button
-          id="oracle-cycle-btn"
-          class="px-3.5 py-1.5 rounded-xl bg-[var(--bg-canvas)] hover:bg-[var(--accent-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-[var(--border-accent)] transition font-sans text-xs flex items-center gap-2 group shadow-sm"
-        >
-          <span class="font-mono text-[var(--accent-primary)] font-bold">↻</span>
-          <span>Ponder Next Concept</span>
-        </button>
-      </div>
-
-      <!-- Active Concept Card -->
-      <div id="oracle-card" class="space-y-4 font-sans transition-all duration-300">
-        <div class="flex items-center gap-2">
-          <span id="oracle-field-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[var(--tag-bg)] text-[var(--accent-primary)] border border-[var(--tag-border)]">
-            Epistemology
-          </span>
-          <span id="oracle-author" class="text-xs text-[var(--text-muted)] italic font-serif">
-            William James / Ludwig Wittgenstein
-          </span>
-        </div>
-
-        <h3 id="oracle-title" class="text-xl sm:text-2xl font-serif font-bold text-[var(--text-primary)]">
-          The Infinite Regress of Definition
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div class="p-4 rounded-xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)]">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-primary)] mb-1">
-              Thesis / Structural Logic
-            </div>
-            <p id="oracle-thesis" class="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Every word in a natural language is defined using other words, demanding an infinite chain of subsequent definitions unless grounded in semantic primitives.
-            </p>
+          <p class="inspection-note hero-note">01 / Editorial type gives ideas room. A strict grid keeps the rest in order.</p>
+        </section>
+        <section id="process" class="relationship" aria-label="From design to development">
+          <p>I design what you see.</p><img class="annotation-flow" src="/images/annotation-flow.png" alt="" /><p class="relationship-end">and build what you don't.</p><pre aria-label="A way of working"><code><span>function</span> build() &#123;
+  return ideas
+    .map(design)
+    .toProduct();
+&#125;</code></pre>
+          <p class="inspection-note process-note">02 / Astro for the showcase. TypeScript for the learning application. One shared visual language.</p>
+        </section>
+        <section id="work" class="selected-work" aria-labelledby="project-title">
+          <div class="project-summary">
+            <p class="eyebrow ruled">01 / Software for learning</p>
+            <h2 id="project-title">R-mergency</h2>
+            <p>A little clarity<br />before the exam.<br />Cram sheets, focused lessons,<br />and practice that sticks.</p>
+            <a class="text-link" href="/R-mergency/">Open project <img class="folio-icon" src="/icons/arrow-right.svg" alt="" /></a>
+            <p class="project-meta">Design / TypeScript / Learning tools</p>
           </div>
-
-          <div class="p-4 rounded-xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)]">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-rose-500 dark:text-rose-400 mb-1">
-              Antithesis / Epistemic Paradox
-            </div>
-            <p id="oracle-antithesis" class="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Excessive formal excavation causes meaning to dissolve (semantic satiation); practical communication succeeds by intentionally arresting definition at the boundary of behavioral utility.
-            </p>
-          </div>
-        </div>
-
-        <div class="flex justify-between items-center pt-2">
-          <a
-            id="oracle-link"
-            href="/research/the-horizon-of-meaning"
-            class="text-xs font-semibold text-[var(--accent-primary)] hover:underline flex items-center gap-1"
-          >
-            Explore Related Research Essay →
+          <a class="project-collage" href="/R-mergency/" aria-label="Explore R-mergency, an exam preparation application">
+            <img class="paper-backing" src="/images/project-paper.webp" alt="" />
+            <img class="study-preview" src="/images/rmergency-study.png" alt="R-mergency syllabus with editorial headings, a module index, and readable code examples" width="1080" height="810" />
+            <img class="drill-preview" src="/images/rmergency-drill.png" alt="R-mergency practice drill with answer choices and explanations" width="700" height="900" />
+            <span class="collage-caption">Less noise.<br />More understanding.</span>
           </a>
-          <span class="text-[10px] font-mono text-[var(--text-muted)]" id="oracle-counter">
-            Concept 1 of 4
-          </span>
-        </div>
-      </div>
+          <aside id="thinking" class="thinking" aria-labelledby="thinking-title">
+            <p class="eyebrow">02 / Thinking in public</p>
+            <h2 id="thinking-title">In the<br /><em>margins.</em></h2>
+            <p>Research, reflections,<br />and questions that<br />don't quite leave me alone.</p>
+            <a class="text-link" href="/philosophy/">Read the philosophy <img class="folio-icon" src="/icons/arrow-right.svg" alt="" /></a>
+            <p class="margin-note">Better interfaces<br />begin with<br />better questions.</p>
+          </aside>
+          <p class="inspection-note work-note">03 / The product images are captures of the working application. Open the project to try it.</p>
+        </section>
+        <footer><a href="/">funtohard</a><p>Made to be considered. Built to be used.</p><a href="https://github.com/FunToHard">Source &amp; experiments <img class="folio-icon" src="/icons/arrow-up-right.svg" alt="" /></a></footer>
+      </main>
     </div>
-  </section>
-
-  <!-- Live Repository Metrics Bar -->
-  <section class="mb-16 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center font-sans">
-    <div class="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
-      <div class="text-2xl font-serif font-bold text-[var(--accent-primary)]">
-        {allResearch.length + allThoughts.length}
-      </div>
-      <div class="text-[11px] text-[var(--text-muted)] uppercase tracking-wider mt-1">
-        Total Publications
-      </div>
-    </div>
-
-    <div class="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
-      <div class="text-2xl font-serif font-bold text-[var(--accent-primary)]">
-        4
-      </div>
-      <div class="text-[11px] text-[var(--text-muted)] uppercase tracking-wider mt-1">
-        Core Disciplines
-      </div>
-    </div>
-
-    <div class="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
-      <div class="text-2xl font-serif font-bold text-[var(--accent-primary)]">
-        KaTeX
-      </div>
-      <div class="text-[11px] text-[var(--text-muted)] uppercase tracking-wider mt-1">
-        Zero-JS Static Math
-      </div>
-    </div>
-
-    <div class="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
-      <div class="text-2xl font-serif font-bold text-[var(--accent-primary)]">
-        3
-      </div>
-      <div class="text-[11px] text-[var(--text-muted)] uppercase tracking-wider mt-1">
-        Curated Themes
-      </div>
-    </div>
-  </section>
-
-  <!-- 4 Curated Reading Pathways -->
-  <section class="mb-16">
-    <div class="mb-8">
-      <h2 class="text-2xl font-serif font-bold text-[var(--text-primary)]">
-        Guided Reading Curriculums
-      </h2>
-      <p class="text-xs sm:text-sm font-sans text-[var(--text-muted)]">
-        Structured intellectual journeys through epistemological limits, machine minds, and historical inquiry
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <a
-        href="/research/the-horizon-of-meaning"
-        class="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-accent)] hover:shadow-lg transition group block"
-      >
-        <div class="flex items-center gap-2 text-xs font-semibold text-[var(--accent-primary)] font-sans uppercase tracking-wider mb-2">
-          <span>01</span> • <span>Epistemology &amp; Semantics</span>
-        </div>
-        <h3 class="text-lg font-serif font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors mb-2">
-          The Horizon of Meaning
-        </h3>
-        <p class="text-xs font-sans text-[var(--text-secondary)] leading-relaxed">
-          How semantic observer effects and descriptive normalization challenge mathematical rigidity in language.
-        </p>
-      </a>
-
-      <a
-        href="/thoughts/epistemology-of-the-machine"
-        class="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-accent)] hover:shadow-lg transition group block"
-      >
-        <div class="flex items-center gap-2 text-xs font-semibold text-[var(--accent-primary)] font-sans uppercase tracking-wider mb-2">
-          <span>02</span> • <span>Philosophy of Computation</span>
-        </div>
-        <h3 class="text-lg font-serif font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors mb-2">
-          The Epistemology of the Machine
-        </h3>
-        <p class="text-xs font-sans text-[var(--text-secondary)] leading-relaxed">
-          Why Undefined Behavior represents an intentional ontological void rather than an unknown physical state.
-        </p>
-      </a>
-
-      <a
-        href="/research/philosophers-wives-fame-and-erasure"
-        class="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-accent)] hover:shadow-lg transition group block"
-      >
-        <div class="flex items-center gap-2 text-xs font-semibold text-[var(--accent-primary)] font-sans uppercase tracking-wider mb-2">
-          <span>03</span> • <span>Ethics &amp; Intellectual History</span>
-        </div>
-        <h3 class="text-lg font-serif font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors mb-2">
-          Philosophers' Wives: Fame and Erasure
-        </h3>
-        <p class="text-xs font-sans text-[var(--text-secondary)] leading-relaxed">
-          Psychological dynamics, vilification, and historical erasure of thinkers from Xanthippe to Harriet Taylor Mill.
-        </p>
-      </a>
-    </div>
-  </section>
-
-  <!-- Featured Research Section -->
-  {featuredResearch.length > 0 && (
-    <section class="mb-16">
-      <div class="flex items-center justify-between mb-8 border-b border-[var(--border-subtle)] pb-4">
-        <div>
-          <h2 class="text-2xl font-serif font-bold text-[var(--text-primary)]">Featured Research Papers</h2>
-          <p class="text-xs sm:text-sm font-sans text-[var(--text-muted)]">Formal philosophy publications and rigorous analytical investigations</p>
-        </div>
-        <a href="/research" class="text-xs font-sans font-semibold text-[var(--accent-primary)] hover:underline">
-          View All Papers →
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {featuredResearch.map((item) => (
-          <ArticleCard
-            title={item.data.title}
-            description={item.data.description}
-            pubDate={item.data.pubDate}
-            slug={item.slug}
-            category={item.data.category}
-            tags={item.data.tags}
-            type="research"
-          />
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Recent Thoughts Section -->
-  <section class="mb-16">
-    <div class="flex items-center justify-between mb-8 border-b border-[var(--border-subtle)] pb-4">
-      <div>
-        <h2 class="text-2xl font-serif font-bold text-[var(--text-primary)]">Thoughts Stream</h2>
-        <p class="text-xs sm:text-sm font-sans text-[var(--text-muted)]">Short reflections, micro-essays, and conceptual notes</p>
-      </div>
-      <a href="/thoughts" class="text-xs font-sans font-semibold text-[var(--accent-primary)] hover:underline">
-        View All Thoughts →
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {sortedThoughts.map((item) => (
-        <ArticleCard
-          title={item.data.title}
-          description={item.data.description}
-          pubDate={item.data.pubDate}
-          slug={item.slug}
-          tags={item.data.tags}
-          type="thoughts"
-        />
-      ))}
-    </div>
-  </section>
-
-  <!-- Topic Taxonomy Cloud -->
-  <section class="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center font-sans shadow-sm">
-    <div class="flex items-center justify-center gap-2 mb-2 text-xs font-bold uppercase tracking-wider text-[var(--accent-primary)]">
-      <span>Philosophical Taxonomy</span>
-    </div>
-    <h3 class="text-xl font-serif font-bold text-[var(--text-primary)] mb-2">Explore by Subject Matter</h3>
-    <p class="text-xs text-[var(--text-muted)] max-w-md mx-auto mb-6">
-      Browse publications through foundational fields of metaphysics, epistemology, formal logic, and ethical inquiry.
-    </p>
-
-    <div class="flex flex-wrap justify-center gap-2.5">
-      {sortedTags.map(([tag, count]) => (
-        <a
-          href={`/topics/${tag.toLowerCase().replace(/\s+/g, '-')}`}
-          class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-[var(--bg-canvas)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--border-accent)] transition border border-[var(--border-subtle)] shadow-sm flex items-center gap-1.5 group"
-        >
-          <span>#{tag}</span>
-          <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-[var(--tag-bg)] text-[var(--accent-primary)] font-semibold">
-            {count}
-          </span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <script>
-    // The Epistemic Dialectic Oracle Data & Interactivity
-    const oracleConcepts = [
-      {
-        field: "Epistemology",
-        author: "William James & Ludwig Wittgenstein",
-        title: "The Infinite Regress of Definition",
-        thesis: "Every word in a natural language is defined using other words, demanding an infinite chain of subsequent definitions unless grounded in semantic primitives.",
-        antithesis: "Excessive formal excavation causes meaning to dissolve (semantic satiation); practical communication succeeds by intentionally arresting definition at the boundary of behavioral utility.",
-        link: "/research/the-horizon-of-meaning",
-      },
-      {
-        field: "Semantics & Logic",
-        author: "Gottlob Frege & Ferdinand de Saussure",
-        title: "The Syntax-Normalization Conflict",
-        thesis: "Formal logical notation demands absolute structural determinism, where every symbol maps strictly to a rigorous mathematical referent.",
-        antithesis: "Living natural languages evolve via organic descriptive usage, rendering strict prescriptivist syntax inadequate to contain evolving semantic boundaries.",
-        link: "/research/the-horizon-of-meaning",
-      },
-      {
-        field: "Philosophy of Computation",
-        author: "Systems Architecture & ISO Standards",
-        title: "The Undefined vs. Unknown Paradox",
-        thesis: "Hardware state machines are 100% deterministic bare-metal circuits; no computer execution is physically 'unknown'.",
-        antithesis: "'Undefined Behavior' is not an epistemological statement about hardware, but an ontological nullification of the semantic contract, enabling aggressive compiler optimization.",
-        link: "/thoughts/epistemology-of-the-machine",
-      },
-      {
-        field: "Ethics & History",
-        author: "John Stuart Mill & Harriet Taylor Mill",
-        title: "The Epistemic Injustice of Erasure",
-        thesis: "The history of philosophy celebrates solitary heroic thinkers who author canonical frameworks.",
-        antithesis: "Victorian domestic erasure systematically credited male philosophers with collaborative co-authored masterpieces (On Liberty, Subjection of Women), distorting philosophical history.",
-        link: "/research/philosophers-wives-fame-and-erasure",
-      }
-    ];
-
-    let currentOracleIndex = 0;
-    const cycleBtn = document.getElementById('oracle-cycle-btn');
-    const fieldBadge = document.getElementById('oracle-field-badge');
-    const authorEl = document.getElementById('oracle-author');
-    const titleEl = document.getElementById('oracle-title');
-    const thesisEl = document.getElementById('oracle-thesis');
-    const antithesisEl = document.getElementById('oracle-antithesis');
-    const linkEl = document.getElementById('oracle-link') as HTMLAnchorElement;
-    const counterEl = document.getElementById('oracle-counter');
-    const oracleCard = document.getElementById('oracle-card');
-
-    if (cycleBtn && fieldBadge && authorEl && titleEl && thesisEl && antithesisEl && linkEl && counterEl && oracleCard) {
-      cycleBtn.addEventListener('click', () => {
-        currentOracleIndex = (currentOracleIndex + 1) % oracleConcepts.length;
-        const item = oracleConcepts[currentOracleIndex];
-
-        oracleCard.style.opacity = '0';
-        oracleCard.style.transform = 'translateY(4px)';
-
-        setTimeout(() => {
-          fieldBadge.innerText = item.field;
-          authorEl.innerText = item.author;
-          titleEl.innerText = item.title;
-          thesisEl.innerText = item.thesis;
-          antithesisEl.innerText = item.antithesis;
-          linkEl.href = item.link;
-          counterEl.innerText = `Concept ${currentOracleIndex + 1} of ${oracleConcepts.length}`;
-
-          oracleCard.style.opacity = '1';
-          oracleCard.style.transform = 'translateY(0)';
-        }, 150);
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('#inspect-toggle');
+      toggle?.addEventListener('click', () => {
+        const active = toggle.getAttribute('aria-pressed') !== 'true';
+        toggle.setAttribute('aria-pressed', String(active));
+        document.body.classList.toggle('inspecting', active);
       });
-    }
-  </script>
-</BaseLayout>
-
+    </script>
+  </body>
+</html>
+<style>
+  :global(html) { scroll-behavior: smooth; scroll-padding-top: 28px; }
+  :global(body) { margin: 0; background: var(--folio-paper); color: var(--folio-ink); font-family: var(--folio-sans); -webkit-font-smoothing: antialiased; }
+  :global(*) { box-sizing: border-box; }
+  :global(::selection) { background: #e9dff6; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; }
+  .folio { max-width: 1536px; margin: auto; padding: 0 5.2%; position: relative; }
+  .site-header { display: flex; justify-content: space-between; align-items: center; height: 100px; padding: 0 4%; }
+  .wordmark { display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: 600; letter-spacing: -.7px; }
+  .monogram { font: 600 66px/.8 var(--folio-display); letter-spacing: -6px; }
+  nav { display: flex; gap: 35px; font-size: 14px; }
+  nav a { display: inline-flex; align-items: center; gap: 4px; }
+  nav a:hover { text-decoration: underline; text-underline-offset: 7px; }
+  .page-index { position: absolute; top: 143px; left: 2.5%; display: flex; flex-direction: column; gap: 23px; font-size: 12px; }
+  .page-index a { display: flex; flex-direction: column; gap: 4px; }
+  .page-index a::after { content: ''; height: 1px; width: 18px; background: var(--folio-line); margin-top: 13px; }
+  .page-index a:first-child span { color: var(--folio-accent); }
+  .hero { padding: 22px 0 0 6.2%; position: relative; }
+  .eyebrow { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.1px; margin: 0; line-height: 1.7; }
+  .hero-label { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; }
+  .hero-label::before { content: ''; width: 38px; height: 1px; background: var(--folio-ink); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 37px; align-items: center; }
+  h1 { font: 600 clamp(80px, 10.8vw, 164px)/.84 var(--folio-display); letter-spacing: -7px; margin: 0 0 25px; }
+  h1>span { display: block; white-space: nowrap; }
+  h1>span+span { margin-top: 14px; }
+  h1 em { font-weight: 600; }
+  .accent { color: var(--folio-accent); }
+  .intro-copy { padding-top: 10px; }
+  .intro-copy>p { font-size: 14px; line-height: 1.75; margin: 0 0 32px; }
+  .text-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--folio-ink); padding: 10px 0; }
+  .text-link:hover { color: var(--folio-accent); border-color: var(--folio-accent); }
+  .text-link img { transition: transform .2s; }
+  .text-link:hover img { transform: translateX(4px); }
+  .mode-control { margin-top: 18px; display: flex; align-items: center; gap: 12px; font-size: 10px; color: var(--folio-muted); }
+  .mode-control button { background: none; border: 0; padding: 7px 0; color: var(--folio-ink); cursor: pointer; }
+  .mode-control button span { padding: 0 5px; color: #b7acc5; }
+  .mode-control button[aria-pressed=true] { color: var(--folio-accent); }
+  .relationship { display: grid; grid-template-columns: 215px minmax(50px, 1fr) 225px 165px; gap: 12px; align-items: center; height: 110px; position: relative; padding: 0 0 0 3.4%; margin-bottom: 10px; }
+  .relationship>p:not(.inspection-note) { font: 500 23px var(--folio-display); white-space: nowrap; align-self: start; margin-top: 25px; }
+  .relationship>.relationship-end { align-self: end !important; margin-bottom: 29px; }
+  .annotation-flow { width: 100%; height: 125px; object-fit: cover; }
+  .relationship pre { font: 11px/1.6 ui-monospace, monospace; color: #605082; background: #f6f4f7; padding: 14px; margin: 0; }
+  .relationship code>span { color: var(--folio-accent); }
+  .selected-work { display: grid; grid-template-columns: 330px minmax(0,1fr) 265px; min-height: 490px; position: relative; }
+  .project-summary { z-index: 2; padding-top: 14px; pointer-events: none; }
+  .project-summary a { pointer-events: auto; }
+  .ruled { white-space: nowrap; display: flex; align-items: center; gap: 13px; width: 460px; }
+  .ruled::after { content: ''; height: 1px; flex: 1; background: var(--folio-line); }
+  .project-summary h2 { font: 600 clamp(43px, 4.8vw, 72px)/1 var(--folio-display); letter-spacing: -3px; white-space: nowrap; margin: 37px 0 25px; }
+  .project-summary>p:not(.eyebrow):not(.project-meta) { font-size: 15px; line-height: 1.7; margin: 0 0 32px; }
+  .project-summary .text-link { gap: 35px; }
+  .project-meta { font-size: 9px; letter-spacing: .6px; margin-top: 22px; color: var(--folio-muted); max-width: 190px; line-height: 1.8; }
+  .project-collage { position: relative; display: block; min-width: 0; height: 470px; margin: 0 10px 0 -15px; }
+  .paper-backing { position: absolute; width: 122%; max-width: none; height: 100%; left: -10%; object-fit: fill; }
+  .study-preview { position: absolute; width: 95%; height: 350px; object-fit: cover; object-position: left top; left: 0; top: 53px; transform: rotate(-1.4deg); border: 1px solid #d8d1e2; box-shadow: 0 8px 24px #21103f12; }
+  .drill-preview { position: absolute; width: 48%; height: 348px; object-fit: cover; object-position: top; right: -1%; top: 92px; transform: rotate(3deg); border: 1px solid #d8d1e2; box-shadow: 0 8px 24px #21103f19; }
+  .collage-caption { position: absolute; bottom: 0; left: 20px; font: italic 500 18px/1.1 var(--folio-display); transform: rotate(-4deg); }
+  .thinking { border-left: 1px solid #8c7fa4; padding: 14px 0 0 24px; margin-left: 26px; }
+  .thinking .eyebrow { font-size: 9px; white-space: nowrap; }
+  .thinking h2 { font: 600 60px/.87 var(--folio-display); letter-spacing: -2.5px; margin: 36px 0 28px; }
+  .thinking>p:not(.eyebrow):not(.margin-note) { font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+  .thinking .text-link { font-size: 14px; gap: 20px; }
+  .margin-note { font: 500 italic 22px/1.1 var(--folio-display); color: var(--folio-muted); transform: rotate(-5deg); margin: 40px 0 0 12px; }
+  footer { border-top: 1px solid var(--folio-line); padding: 22px 0 26px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 20px; gap: 20px; }
+  footer p { color: var(--folio-muted); margin: 0; }
+  footer a:last-child { display: inline-flex; gap: 10px; align-items: center; }
+  .inspection-note { display: none; color: #7b301e; background: #fff1eb; border-left: 2px solid var(--folio-accent); padding: 8px 12px; font-size: 11px; line-height: 1.6; margin: 10px 0; }
+  :global(.inspecting) .inspection-note { display: block; }
+  :global(.inspecting) .hero-grid, :global(.inspecting) .selected-work { outline: 1px dashed #b3a6c4; outline-offset: 8px; }
+  :global(.inspecting) .relationship { height: auto; min-height: 140px; }
+  :global(.inspecting) .process-note { position: static; grid-column: 1/-1; max-width: none; }
+  .process-note { position: absolute; right: 15px; bottom: -10px; max-width: 420px; z-index: 3; }
+  .work-note { grid-column: 1/-1; }
+  .skip-link { position: fixed; top: -80px; left: 20px; background: var(--folio-ink); color: white; padding: 12px; z-index: 20; }
+  .skip-link:focus { top: 10px; }
+  @media(min-width:1151px) { .relationship { margin-top: -14px; } .relationship>p:not(.inspection-note) { margin-top: 5px; } .relationship>.relationship-end { margin-bottom: 16px; } .project-collage { margin-left: 0; } }
+  @media(min-width:1500px) { .folio { padding: 0 74px; } }
+  @media(max-width:1150px) { .hero-grid { grid-template-columns: minmax(0,1fr) 225px; gap: 20px; } h1 { font-size: 10.5vw; letter-spacing: -5px; } .intro-copy>p { font-size: 13px; } .selected-work { grid-template-columns: 190px minmax(0,1fr) 215px; } .project-summary h2 { font-size: 55px; } .thinking { padding-left: 18px; margin-left: 15px; } .thinking h2 { font-size: 52px; } .relationship { grid-template-columns: 180px minmax(30px,1fr) 200px 145px; } .relationship>p:not(.inspection-note) { font-size: 21px; } .relationship pre { font-size: 10px; } .study-preview { height: 320px; } .drill-preview { height: 315px; } }
+  @media(max-width:850px) { .folio { padding: 0 28px; } .site-header { padding: 0; height: 90px; } .page-index { display: none; } .hero { padding: 22px 0 0; } .hero-grid { grid-template-columns: 1fr; gap: 15px; } h1 { font-size: 15.2vw; margin-bottom: 0; } .intro-copy { display: grid; grid-template-columns: 1fr auto; gap: 0 25px; align-items: center; } .intro-copy>p { font-size: 14px; margin-bottom: 8px; } .intro-copy .text-link { align-self: center; } .mode-control { grid-column: 2; grid-row: 2; margin-top: 0; } .relationship { grid-template-columns: 180px 1fr 210px; padding: 0; height: 130px; margin-top: 5px; } .relationship pre { display: none; } .selected-work { grid-template-columns: 185px minmax(0,1fr); } .thinking { grid-column: 1/-1; margin: 20px 0 0; padding: 25px 0; border-left: 0; border-top: 1px solid var(--folio-line); display: grid; grid-template-columns: 1fr 1fr; gap: 16px 30px; align-items: center; } .thinking h2 { grid-column: 1; grid-row: 2/4; margin: 0; font-size: 60px; } .thinking>p:not(.eyebrow):not(.margin-note) { margin: 0; } .thinking .text-link { justify-self: start; } .margin-note { display: none; } .project-collage { height: 440px; } .ruled { width: 350px; } footer { margin-top: 0; } }
+  @media(max-width:550px) { .folio { padding: 0 22px; } .site-header { height: 83px; } .wordmark { gap: 10px; font-size: 14px; } .monogram { font-size: 52px; } nav { gap: 17px; font-size: 12px; } nav .folio-icon { width: 12px; } .hero-label { font-size: 8px; letter-spacing: 1.6px; margin-bottom: 25px; gap: 10px; } .hero-label::before { width: 22px; } h1 { font-size: 15.7vw; letter-spacing: -2.8px; line-height: .96; } h1>span+span { margin-top: 0; } .hero-grid { gap: 22px; } .intro-copy { display: block; padding-top: 0; } .intro-copy>p { font-size: 14px; } .intro-copy .text-link { margin-top: 10px; } .mode-control { margin-top: 8px; } .relationship { grid-template-columns: 1fr 1fr; height: 120px; margin: 18px 0 10px; } .relationship>p:not(.inspection-note) { font-size: 19px; position: relative; z-index: 1; margin-top: 0; } .relationship>p.relationship-end { margin-bottom: 0; white-space: normal; text-align: right; } .annotation-flow { position: absolute; width: 75%; height: 80px; top: 20px; left: 9%; } .selected-work { grid-template-columns: 1fr; } .project-summary { display: grid; grid-template-columns: 1fr auto; gap: 0 16px; padding-top: 5px; } .ruled { grid-column: 1/-1; width: 100%; font-size: 9px; } .project-summary h2 { margin: 24px 0 18px; font-size: 56px; grid-column: 1/-1; } .project-summary>p:not(.eyebrow):not(.project-meta) { font-size: 14px; margin: 0; } .project-summary .text-link { align-self: center; font-size: 13px; gap: 18px; } .project-meta { grid-column: 1/-1; max-width: none; margin: 14px 0 0; } .project-collage { margin: 10px 0 0; height: 365px; } .study-preview { top: 40px; height: 260px; width: 91%; } .drill-preview { top: 77px; height: 268px; width: 46%; } .collage-caption { bottom: 0; font-size: 16px; } .paper-backing { height: 100%; width: 110%; left: -5%; } .thinking { gap: 15px 18px; padding-top: 25px; margin-top: 15px; } .thinking .eyebrow { grid-column: 1/-1; } .thinking h2 { font-size: 48px; } .thinking>p:not(.eyebrow):not(.margin-note) { font-size: 12px; } .thinking .text-link { font-size: 12px; gap: 8px; } footer { font-size: 10px; flex-wrap: wrap; gap: 12px; } footer p { order: 3; width: 100%; } .process-note { max-width: 100%; bottom: -16px; font-size: 9px; } }
+</style>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const items = [...await getCollection('research',({data})=>!data.draft),...await getCollection('thoughts',({data})=>!data.draft)];
+const counts = new Map<string,number>();
+items.forEach(item=>item.data.tags.forEach(tag=>counts.set(tag,(counts.get(tag)||0)+1)));
+const subjects=[...counts.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+---
+<BaseLayout title="Subjects — Philosophy" description="An alphabetical subject index of philosophy and computation research.">
+  <header class="archive-heading"><p class="scholar-label">03 / Subject taxonomy</p><h1>Fields of inquiry.</h1><p>Connections across the journal.<br />An alphabetical index of subjects and concepts.</p></header>
+  <div class="archive-toolbar"><span>{subjects.length} subjects</span><label class="subject-search-label" for="subject-filter">Find a subject<input type="search" id="subject-filter" placeholder="Filter subjects…" /></label></div>
+  <div class="subjects-index">{subjects.map(([name,count],index)=><a href={`/philosophy/topics/${name.toLowerCase().replace(/\s+/g,'-')}/`} data-subject={name.toLowerCase()}><span>{String(index+1).padStart(2,'0')}</span><h2>{name}</h2><span>{count} {count===1?'publication':'publications'}</span><img src="/icons/arrow-right.svg" alt="" /></a>)}</div>
+  <p id="subject-empty" hidden class="archive-empty" role="status">No subjects match this search.</p>
+  <script>
+    document.querySelector<HTMLInputElement>('#subject-filter')?.addEventListener('input',event=>{const query=(event.target as HTMLInputElement).value.trim().toLowerCase();let count=0;document.querySelectorAll<HTMLElement>('[data-subject]').forEach(item=>{item.hidden=!item.dataset.subject!.includes(query);if(!item.hidden)count++;});document.querySelector<HTMLElement>('#subject-empty')!.hidden=count!==0;});
+  </script>
+</BaseLayout>

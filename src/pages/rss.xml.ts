@@ -9,14 +9,14 @@ export async function GET(context: any) {
     title: `[Research] ${item.data.title}`,
     pubDate: item.data.pubDate,
     description: item.data.description,
-    link: `/research/${item.slug}/`,
+    link: `/philosophy/research/${item.slug}/`,
   }));
 
   const thoughtItems = thoughts.map((item) => ({
     title: `[Thought] ${item.data.title}`,
     pubDate: item.data.pubDate,
     description: item.data.description,
-    link: `/thoughts/${item.slug}/`,
+    link: `/philosophy/thoughts/${item.slug}/`,
   }));
 
   const allItems = [...researchItems, ...thoughtItems].sort(

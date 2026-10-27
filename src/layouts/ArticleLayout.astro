@@ -43,7 +43,7 @@ const currentYear = pubDate.getFullYear();
   author={author}
 >
   <!-- Reading Progress Bar -->
-  <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-[var(--accent-primary)] to-amber-300 z-50 transition-all duration-100 w-0"></div>
+  <div id="progress-bar" class="scholar-progress"></div>
 
   <!-- Floating Text Selection Quote & Share Toolbar -->
   <div
@@ -59,9 +59,10 @@ const currentYear = pubDate.getFullYear();
     </button>
   </div>
 
-  <article id="main-article" class="max-w-4xl mx-auto transition-all duration-300">
+  <article id="main-article" class="scholar-article">
+    <nav class="article-breadcrumb" aria-label="Article location"><a href="/philosophy/">Philosophy</a><span>/</span><a href={type === 'research' ? '/philosophy/research/' : '/philosophy/thoughts/'}>{type === 'research' ? 'Research' : 'Thoughts'}</a></nav>
     <!-- Top Article Header -->
-    <header class="mb-10 pb-8 border-b border-[var(--border-subtle)]">
+    <header class="scholar-article-heading">
       <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
         <div class="flex items-center gap-2.5 text-xs font-semibold tracking-wider uppercase text-[var(--accent-primary)] font-sans">
           <span>{type === 'research' ? 'Philosophy Research' : 'Thought Stream'}</span>
@@ -142,16 +143,16 @@ const currentYear = pubDate.getFullYear();
       <div class="flex items-center gap-2">
         <span class="text-[var(--text-muted)] font-medium">Size:</span>
         <div class="flex rounded-lg bg-[var(--bg-canvas)] p-0.5 border border-[var(--border-subtle)]">
-          <button data-size="sm" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A-</button>
-          <button data-size="base" class="size-switch-btn px-2 py-1 rounded-md text-[var(--accent-primary)] font-semibold transition">A</button>
-          <button data-size="lg" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A+</button>
-          <button data-size="xl" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A++</button>
+          <button data-size="sm" aria-label="Small text" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A-</button>
+          <button data-size="base" aria-label="Default text size" class="size-switch-btn px-2 py-1 rounded-md text-[var(--accent-primary)] font-semibold transition">A</button>
+          <button data-size="lg" aria-label="Large text" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A+</button>
+          <button data-size="xl" aria-label="Extra large text" class="size-switch-btn px-2 py-1 rounded-md text-[var(--text-muted)] transition">A++</button>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
         <button
-          id="focus-mode-btn"
+          id="focus-mode-btn" aria-pressed="false"
           class="px-3 py-1 rounded-lg bg-[var(--bg-canvas)] hover:bg-[var(--accent-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] transition flex items-center gap-1.5"
           title="Toggle Distraction-Free Focus Mode"
         >
@@ -161,7 +162,7 @@ const currentYear = pubDate.getFullYear();
     </div>
 
     <!-- Main Article Body & Table of Contents Sidebar -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class="scholar-reading-grid">
       {headings.length > 0 && (
         <aside id="toc-sidebar" class="lg:col-span-1 lg:order-2 transition-opacity duration-300">
           <div class="sticky top-24 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
@@ -176,8 +177,8 @@ const currentYear = pubDate.getFullYear();
                 <a
                   href={`#${heading.slug}`}
                   data-toc-slug={heading.slug}
-                  class={`toc-link block text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition truncate py-0.5 ${
-                    heading.depth === 3 ? 'pl-3 text-[11px]' : 'font-medium'
+                  class={`toc-link block text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition py-0.5 ${
+                    heading.depth === 3 ? 'pl-3 text-[11px]' : heading.depth >= 4 ? 'pl-6 text-[11px]' : 'font-medium'
                   }`}
                 >
                   {heading.text}
@@ -192,7 +193,7 @@ const currentYear = pubDate.getFullYear();
       <div
         id="article-content"
         data-pagefind-body
-        class={`prose max-w-none ${headings.length > 0 ? 'lg:col-span-3 lg:order-1' : 'lg:col-span-4'}`}
+        class="prose scholar-prose"
       >
         <slot />
       </div>
@@ -204,7 +205,7 @@ const currentYear = pubDate.getFullYear();
         <div class="flex flex-wrap gap-2">
           {tags.map(tag => (
             <a
-              href={`/topics/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+              href={`/philosophy/topics/${tag.toLowerCase().replace(/\s+/g, '-')}`}
               class="px-3 py-1 text-xs rounded-full bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--border-accent)] transition border border-[var(--border-subtle)] font-sans"
             >
               #{tag}
@@ -220,20 +221,10 @@ const currentYear = pubDate.getFullYear();
         </button>
       </div>
 
-      <div class="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-start gap-4 font-sans text-xs">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-gray-950 flex items-center justify-center font-display font-black text-sm flex-shrink-0">
-          Φ
-        </div>
-        <div>
-          <div class="font-serif font-bold text-sm text-[var(--text-primary)] mb-1">funtohard / episteme</div>
-          <p class="text-[var(--text-secondary)] leading-relaxed">
-            Published in the open research repository. For questions, critiques, or formal logic revisions, contact the author or explore related essays in the topics index.
-          </p>
-        </div>
-      </div>
+      <p class="article-repository-note">An independent publication by {author}. <a href="https://github.com/FunToHard/funtohard.github.io">Source, discussion, and revisions</a> are available in the open repository.</p>
 
       <div class="flex justify-between items-center text-sm font-sans pt-6">
-        <a href={type === 'research' ? '/research' : '/thoughts'} class="text-[var(--accent-primary)] hover:underline flex items-center gap-1.5 font-medium">
+        <a href={type === 'research' ? '/philosophy/research' : '/philosophy/thoughts'} class="text-[var(--accent-primary)] hover:underline flex items-center gap-1.5 font-medium">
           ← Back to {type === 'research' ? 'Research Index' : 'Thoughts Stream'}
         </a>
       </div>
@@ -241,13 +232,13 @@ const currentYear = pubDate.getFullYear();
   </article>
 
   <!-- Academic Citation Modal -->
-  <div id="cite-modal" class="hidden fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-16 bg-black/75 backdrop-blur-md items-center justify-center">
+  <div id="cite-modal" role="dialog" aria-modal="true" aria-label="Cite this publication" class="hidden fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-16 bg-black/75 backdrop-blur-md items-center justify-center">
     <div class="relative w-full max-w-xl bg-[var(--bg-surface)] rounded-2xl shadow-2xl border border-[var(--border-subtle)] p-6 font-sans text-xs">
       <div class="flex items-center justify-between mb-4 border-b border-[var(--border-subtle)] pb-3">
         <div class="flex items-center gap-2">
           <h3 class="font-serif font-bold text-base text-[var(--text-primary)]">Cite this Publication</h3>
         </div>
-        <button id="close-cite-modal" class="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-mono">✕</button>
+        <button id="close-cite-modal" aria-label="Close citation" class="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-mono">Close</button>
       </div>
 
       <!-- Format Tabs -->
@@ -293,7 +284,7 @@ const currentYear = pubDate.getFullYear();
     });
 
     // Active Scrollspy for Table of Contents
-    const headings = document.querySelectorAll('#article-content h2, #article-content h3');
+    const headings = document.querySelectorAll('#article-content h2, #article-content h3, #article-content h4');
     const tocLinks = document.querySelectorAll('.toc-link');
     window.addEventListener('scroll', () => {
       let currentId = '';
@@ -317,6 +308,7 @@ const currentYear = pubDate.getFullYear();
     const applyReadingFont = (font) => {
       fontBtns.forEach((b) => {
         const btnFont = b.dataset.font;
+        b.setAttribute('aria-pressed', String(btnFont === font));
         if (btnFont === font) {
           b.classList.add('text-[var(--accent-primary)]', 'font-semibold');
           b.classList.remove('text-[var(--text-muted)]');
@@ -329,11 +321,11 @@ const currentYear = pubDate.getFullYear();
         content.setAttribute('data-font', font);
         content.classList.remove('font-serif', 'font-sans', 'font-mono');
         content.classList.add(`font-${font}`);
-        const fontFamily = font === 'sans' 
-          ? "'Inter', system-ui, -apple-system, sans-serif" 
-          : font === 'mono' 
-          ? "'JetBrains Mono', monospace" 
-          : "'Newsreader', Georgia, serif";
+        const fontFamily = font === 'sans'
+          ? "'IBM Plex Sans', system-ui, sans-serif"
+          : font === 'mono'
+          ? "ui-monospace, Consolas, monospace"
+          : "'Source Serif 4', Georgia, serif";
         content.style.fontFamily = fontFamily;
         content.querySelectorAll('p, li, blockquote').forEach((el) => {
           el.style.fontFamily = fontFamily;
@@ -363,6 +355,7 @@ const currentYear = pubDate.getFullYear();
     const applyReadingSize = (size) => {
       sizeBtns.forEach((b) => {
         const btnSize = b.dataset.size;
+        b.setAttribute('aria-pressed', String(btnSize === size));
         if (btnSize === size) {
           b.classList.add('text-[var(--accent-primary)]', 'font-semibold');
           b.classList.remove('text-[var(--text-muted)]');
@@ -391,12 +384,14 @@ const currentYear = pubDate.getFullYear();
     const focusBtn = document.getElementById('focus-mode-btn');
     const focusBtnText = document.getElementById('focus-btn-text');
     const header = document.querySelector('header');
-    const footer = document.querySelector('footer');
+    const footer = document.getElementById('scholar-footer');
     const tocSidebar = document.getElementById('toc-sidebar');
     let isFocus = false;
     if (focusBtn) {
       focusBtn.addEventListener('click', () => {
         isFocus = !isFocus;
+        document.body.classList.toggle('reading-focus', isFocus);
+        focusBtn.setAttribute('aria-pressed', String(isFocus));
         if (header) header.style.opacity = isFocus ? '0.15' : '1';
         if (footer) footer.style.opacity = isFocus ? '0.15' : '1';
         if (tocSidebar) tocSidebar.style.opacity = isFocus ? '0.2' : '1';
@@ -415,12 +410,12 @@ const currentYear = pubDate.getFullYear();
     document.addEventListener('selectionchange', () => {
       const selection = window.getSelection();
       const text = selection ? selection.toString().trim() : '';
-      if (text && text.length > 3 && toolbar) {
+      if (text && text.length > 3 && toolbar && content?.contains(selection?.anchorNode || null) && content?.contains(selection?.focusNode || null)) {
         selectedText = text;
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
-        toolbar.style.top = `${rect.top + window.scrollY - 44}px`;
-        toolbar.style.left = `${Math.max(10, rect.left + rect.width / 2 - 80)}px`;
+        toolbar.style.top = `${Math.max(5, rect.top - 44)}px`;
+        toolbar.style.left = `${Math.max(10, Math.min(window.innerWidth - 230, rect.left + rect.width / 2 - 80))}px`;
         toolbar.classList.remove('hidden');
         toolbar.classList.add('flex');
       } else if (toolbar) {
@@ -440,15 +435,7 @@ const currentYear = pubDate.getFullYear();
 
     if (searchBtn) {
       searchBtn.addEventListener('click', () => {
-        const modal = document.getElementById('search-modal');
-        const input = document.getElementById('search-modal-input');
-        if (modal && input) {
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-          input.value = selectedText;
-          input.dispatchEvent(new Event('input'));
-          input.focus();
-        }
+        window.dispatchEvent(new CustomEvent('scholar:search', {detail:{query:selectedText}}));
       });
     }
 
@@ -480,7 +467,7 @@ const currentYear = pubDate.getFullYear();
     const citeTabs = document.querySelectorAll('.cite-tab-btn');
 
     const slug = window.location.pathname.split('/').filter(Boolean).pop() || 'paper';
-    const cleanUrl = window.location.href;
+    const cleanUrl = new URL(window.location.pathname, window.location.origin).href;
 
     const citations = {
       bibtex: `@article{${author.toLowerCase()}_${currentYear}_${slug.replace(/-/g, '_')},
@@ -498,32 +485,31 @@ const currentYear = pubDate.getFullYear();
     let activeTab = 'bibtex';
     if (citationBox) citationBox.innerText = citations[activeTab];
 
-    if (citeTrigger && citeModal) {
-      citeTrigger.addEventListener('click', () => {
-        citeModal.classList.remove('hidden');
-        citeModal.classList.add('flex');
-      });
-    }
-    if (closeCiteBtn && citeModal) {
-      closeCiteBtn.addEventListener('click', () => {
-        citeModal.classList.add('hidden');
-        citeModal.classList.remove('flex');
-      });
-    }
-    if (citeModal) {
-      citeModal.addEventListener('click', (e) => {
-        if (e.target === citeModal) {
-          citeModal.classList.add('hidden');
-          citeModal.classList.remove('flex');
-        }
-      });
-    }
+    const closeCitation = () => {
+      citeModal?.classList.add('hidden'); citeModal?.classList.remove('flex'); citeTrigger?.focus();
+    };
+    citeTrigger?.addEventListener('click', () => {
+      citeModal?.classList.remove('hidden'); citeModal?.classList.add('flex'); closeCiteBtn?.focus();
+    });
+    closeCiteBtn?.addEventListener('click', closeCitation);
+    citeModal?.addEventListener('click', event => { if(event.target===citeModal) closeCitation(); });
+    document.addEventListener('keydown', event => {
+      if (!citeModal || citeModal.classList.contains('hidden')) return;
+      if (event.key==='Escape') closeCitation();
+      if (event.key==='Tab') {
+        const buttons=[...citeModal.querySelectorAll('button')];
+        if(event.shiftKey && document.activeElement===buttons[0]) {event.preventDefault(); buttons[buttons.length-1]?.focus();}
+        else if(!event.shiftKey && document.activeElement===buttons[buttons.length-1]) {event.preventDefault(); buttons[0]?.focus();}
+      }
+    });
+    citeTabs.forEach(tab=>tab.setAttribute('aria-pressed',String(tab.dataset.citeTab==='bibtex')));
 
     citeTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         citeTabs.forEach(t => t.classList.remove('bg-[var(--accent-subtle)]', 'text-[var(--accent-primary)]', 'font-semibold'));
         tab.classList.add('bg-[var(--accent-subtle)]', 'text-[var(--accent-primary)]', 'font-semibold');
         activeTab = tab.dataset.citeTab || 'bibtex';
+        citeTabs.forEach(item=>item.setAttribute('aria-pressed',String(item===tab)));
         if (citationBox && citations[activeTab]) {
           citationBox.innerText = citations[activeTab];
         }

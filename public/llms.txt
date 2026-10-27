@@ -1,10 +1,13 @@
-# Philosophy Research & Thought Sharing Archive
-> Digital garden and research platform dedicated to Epistemology, Symbolic Logic, Ethics, Metaphysics, and Philosophy of Mind by funtohard.
+# funtohard - Design, Software & Philosophy
+> Design and software development portfolio, learning tools, and independent philosophy research by funtohard.
 
 ## Main Sections
-- [/research](https://funtohard.github.io/research): Peer-reviewed style long-form research papers with formal proofs, citations, and analytical frameworks.
-- [/thoughts](https://funtohard.github.io/thoughts): Short-form philosophical reflections, essays, micro-thoughts, and conceptual observations.
-- [/topics](https://funtohard.github.io/topics): Topic taxonomy including Epistemology, Logic, Ethics, Philosophy, Metaphysics, and Mind.
+- [/work/](https://funtohard.github.io/work/): Selected design and development projects, with interface decisions and implementation context.
+- [/philosophy](https://funtohard.github.io/philosophy): Philosophy research journal with formal proofs, citations, analytical frameworks, and thought streams.
+- [/philosophy/research](https://funtohard.github.io/philosophy/research): Long-form research papers with formal proofs, citations, and analytical frameworks.
+- [/philosophy/thoughts](https://funtohard.github.io/philosophy/thoughts): Short-form philosophical reflections, essays, micro-thoughts, and conceptual observations.
+- [/philosophy/topics](https://funtohard.github.io/philosophy/topics): Topic taxonomy including Epistemology, Logic, Ethics, Philosophy, Metaphysics, and Mind.
+- [/R-mergency](https://funtohard.github.io/R-mergency): Emergency exam cram kits, drill sets, and cheat sheets for university courses.
 
 ## Key Research Topics
 1. **Epistemological Limits & Semantics**: The paradox of definition, semantic observer effects, and natural language syntax normalization.

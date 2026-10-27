@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+const research = (await getCollection('research',({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+const categories = [...new Set(research.map(item=>item.data.category))];
+---
+<BaseLayout title="Research — Philosophy" description="Research papers in philosophy, formal logic, computation, and intellectual history by funtohard.">
+  <header class="archive-heading"><p class="scholar-label">01 / The research index</p><h1>Research.</h1><p>Extended arguments, formal investigations,<br />and questions pursued at length.</p></header>
+  <div class="archive-toolbar"><span>{research.length} papers</span><div class="archive-filters" role="group" aria-label="Filter research by field"><button type="button" data-field="all" aria-pressed="true">All fields</button>{categories.map(name=><button type="button" data-field={name} aria-pressed="false">{name}</button>)}</div></div>
+  <div class="publication-list">{research.map(item=><ArticleCard {...item.data} slug={item.slug} type="research" />)}</div>
+  <script>
+    const fields = document.querySelectorAll<HTMLButtonElement>('[data-field]');
+    fields.forEach(button=>button.addEventListener('click',()=>{fields.forEach(item=>item.setAttribute('aria-pressed',String(item===button))); document.querySelectorAll<HTMLElement>('.publication-row').forEach(row=>{row.hidden=button.dataset.field!=='all'&&row.dataset.category!==button.dataset.field;});}));
+  </script>
+</BaseLayout>

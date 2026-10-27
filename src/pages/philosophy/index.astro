@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+const research = (await getCollection('research',({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+const thoughts = (await getCollection('thoughts',({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+const featured = research.find(item=>item.slug==='the-horizon-of-meaning') || research[0];
+const titleBreak = featured?.data.title.indexOf(':') ?? -1;
+const recent = research.filter(item=>item.id!==featured?.id);
+const subjectNames = ['Epistemology','Logic','Ethics'];
+---
+<BaseLayout title="Philosophy — Independent research & notes" description="Independent inquiries into knowledge, language, computation, and the conditions of understanding by funtohard.">
+  <section class="journal-masthead"><h1>Arguments,<br />under examination.</h1><p>Inquiries into knowledge, language,<br class="wide-only" /> computation, and the conditions<br class="wide-only" /> of understanding.</p></section>
+  <section class="journal-layout" aria-label="Selected research">
+    <aside class="journal-index"><nav aria-label="Journal indexes"><a href="/philosophy/research/" class="current"><span>01</span>Research</a><a href="/philosophy/thoughts/"><span>02</span>Thoughts</a><a href="/philosophy/topics/"><span>03</span>Subjects</a></nav><div class="journal-index-subjects"><p class="scholar-label">Subjects</p>{subjectNames.map(name=><a href={`/philosophy/topics/${name.toLowerCase()}/`}>{name}</a>)}</div></aside>
+    {featured && <article class="journal-feature"><p class="scholar-label">Featured research</p><h2><a href={`/philosophy/research/${featured.slug}/`}>{titleBreak >= 0 ? <>{featured.data.title.slice(0,titleBreak+1)}<br />{featured.data.title.slice(titleBreak+1).trim()}</> : featured.data.title}</a></h2><div class="feature-meta"><a href={`/philosophy/topics/${featured.data.category.toLowerCase()}/`}>{featured.data.category}</a><span>/</span><time datetime={featured.data.pubDate.toISOString()}>{featured.data.pubDate.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})}</time><span>/</span><span>funtohard</span></div><p class="feature-abstract">{featured.data.description}</p><a class="scholar-primary" href={`/philosophy/research/${featured.slug}/`}>Read paper<img src="/icons/arrow-right.svg" alt="" /></a></article>}
+    <aside class="inquiry-margin"><section><p class="scholar-label">In this inquiry</p><ul><li>Definition</li><li>Meaning</li><li>Normalization</li></ul></section><section><p class="scholar-label">Reading the journal</p><p>Extended arguments in research.<br />Shorter inquiries in thoughts.</p></section><section><p class="scholar-label">Related subjects</p><a href="/philosophy/topics/epistemology/">Epistemology</a><a href="/philosophy/topics/logic/">Logic</a><a href="/philosophy/topics/philosophy-of-language/">Philosophy of Language</a></section></aside>
+  </section>
+  <section class="journal-recent" aria-labelledby="recent-heading"><div class="scholar-section-label"><h2 id="recent-heading">Further reading</h2><a href="/philosophy/research/">Research index<img src="/icons/arrow-right.svg" alt="" /></a></div>{recent.map(item=><ArticleCard {...item.data} slug={item.slug} type="research" />)}{thoughts.slice(0,1).map(item=><ArticleCard {...item.data} slug={item.slug} type="thoughts" />)}</section>
+</BaseLayout>

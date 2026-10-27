@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+const thoughts = (await getCollection('thoughts',({data})=>!data.draft)).sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+---
+<BaseLayout title="Thoughts — Philosophy" description="Short philosophical reflections on knowledge, computation, and ontology by funtohard.">
+  <header class="archive-heading"><p class="scholar-label">02 / The thoughts stream</p><h1>Thoughts.</h1><p>Shorter reflections and conceptual notes.<br />Questions before they become extended arguments.</p></header>
+  <div class="archive-toolbar"><span>{thoughts.length} {thoughts.length===1?'reflection':'reflections'}</span><a href="/philosophy/research/">Explore the research index<img src="/icons/arrow-right.svg" alt="" /></a></div>
+  <div class="publication-list">{thoughts.map(item=><ArticleCard {...item.data} slug={item.slug} type="thoughts" />)}</div>
+</BaseLayout>

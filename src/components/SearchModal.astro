@@ -1,7 +1,7 @@
 ---
 ---
 
-<div id="search-modal" class="hidden fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-16 bg-black/75 backdrop-blur-md items-start justify-center animate-fadeIn">
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search philosophy publications" class="hidden fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-16 bg-black/75 backdrop-blur-md items-start justify-center animate-fadeIn">
   <div class="relative w-full max-w-2xl bg-[var(--bg-surface)] rounded-2xl shadow-2xl border border-[var(--border-subtle)] overflow-hidden font-sans text-xs">
     
     <!-- Input Header -->
@@ -10,7 +10,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
       <input
-        id="search-modal-input"
+        id="search-modal-input" aria-label="Search publications and concepts"
         type="text"
         placeholder="Search publications, topics, formal proofs, or keywords..."
         class="w-full bg-transparent text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none text-sm font-sans"
@@ -20,7 +20,7 @@
       <div class="flex items-center gap-1.5 ml-2">
         <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-canvas)] text-[var(--text-muted)] rounded border border-[var(--border-subtle)]">ESC</kbd>
         <button id="close-search-btn" class="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition font-mono" aria-label="Close">
-          ✕
+          Close
         </button>
       </div>
     </div>
@@ -34,21 +34,21 @@
             Navigation &amp; Reading Indexes
           </div>
           <div class="space-y-1 mt-1">
-            <a href="/research" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
+            <a href="/philosophy/research" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
               <span class="flex items-center gap-2.5 font-medium">
                 <span class="w-6 h-6 rounded-md bg-[var(--bg-canvas)] flex items-center justify-center text-[10px] font-mono text-[var(--accent-primary)] font-bold">§</span>
                 <span>Philosophy Research Papers</span>
               </span>
               <span class="text-[11px] text-[var(--text-muted)] group-hover:text-[var(--accent-primary)]">Formal logic &amp; analysis →</span>
             </a>
-            <a href="/thoughts" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
+            <a href="/philosophy/thoughts" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
               <span class="flex items-center gap-2.5 font-medium">
                 <span class="w-6 h-6 rounded-md bg-[var(--bg-canvas)] flex items-center justify-center text-[10px] font-mono text-[var(--accent-primary)] font-bold">¶</span>
                 <span>Thoughts Stream</span>
               </span>
               <span class="text-[11px] text-[var(--text-muted)] group-hover:text-[var(--accent-primary)]">Micro-reflections &amp; notes →</span>
             </a>
-            <a href="/topics" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
+            <a href="/philosophy/topics" class="command-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--accent-subtle)] transition text-[var(--text-primary)] group">
               <span class="flex items-center gap-2.5 font-medium">
                 <span class="w-6 h-6 rounded-md bg-[var(--bg-canvas)] flex items-center justify-center text-[10px] font-mono text-[var(--accent-primary)] font-bold">#</span>
                 <span>Topic Taxonomy</span>
@@ -95,7 +95,9 @@
   const quickActionsSection = document.getElementById('quick-actions-section');
   const dynamicResults = document.getElementById('dynamic-search-results');
 
+  let returnFocus: HTMLElement | null = null;
   const openModal = () => {
+    returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     if (modal) {
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -107,13 +109,21 @@
   };
 
   const closeModal = () => {
-    if (modal) {
+    if (modal && !modal.classList.contains('hidden')) {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+      if (returnFocus?.isConnected) returnFocus.focus();
     }
   };
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  window.addEventListener('scholar:search', event => { openModal(); const query = (event as CustomEvent<{query?:string}>).detail?.query; if (query && searchInput) { searchInput.value = query; searchInput.dispatchEvent(new Event('input')); } });
+  modal?.addEventListener('keydown', event => {
+    if (event.key !== 'Tab') return;
+    const targets = [...modal.querySelectorAll<HTMLElement>('button,a[href],input')].filter(element=>element.offsetParent!==null);
+    if (event.shiftKey && document.activeElement===targets[0]) { event.preventDefault(); targets.at(-1)?.focus(); }
+    else if (!event.shiftKey && document.activeElement===targets.at(-1)) { event.preventDefault(); targets[0]?.focus(); }
+  });
 
   // Close on Escape or shortcut Cmd+K / Ctrl+K
   window.addEventListener('keydown', (e) => {
@@ -139,9 +149,9 @@
   // Quick Action: Random Essay
   const randomBtn = document.getElementById('cmd-random-essay');
   const articlesList = [
-    '/research/the-horizon-of-meaning',
-    '/research/philosophers-wives-fame-and-erasure',
-    '/thoughts/epistemology-of-the-machine',
+    '/philosophy/research/the-horizon-of-meaning',
+    '/philosophy/research/philosophers-wives-fame-and-erasure',
+    '/philosophy/thoughts/epistemology-of-the-machine',
   ];
   if (randomBtn) {
     randomBtn.addEventListener('click', () => {
@@ -212,15 +222,15 @@
       } catch (e) {
         dynamicResults.innerHTML = `
           <div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Suggested Publications</div>
-          <a href="/research/the-horizon-of-meaning" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
+          <a href="/philosophy/research/the-horizon-of-meaning" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
             <div class="font-serif font-bold text-sm text-[var(--text-primary)]">The Horizon of Meaning</div>
             <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Epistemology, Language, and Semantic Normalization</div>
           </a>
-          <a href="/research/philosophers-wives-fame-and-erasure" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
+          <a href="/philosophy/research/philosophers-wives-fame-and-erasure" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
             <div class="font-serif font-bold text-sm text-[var(--text-primary)]">Philosophers' Wives: Fame and Erasure</div>
             <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Ethics, Historical Vilification, and Feminism</div>
           </a>
-          <a href="/thoughts/epistemology-of-the-machine" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
+          <a href="/philosophy/thoughts/epistemology-of-the-machine" class="block p-3 rounded-xl hover:bg-[var(--accent-subtle)] transition border border-transparent hover:border-[var(--border-accent)]">
             <div class="font-serif font-bold text-sm text-[var(--text-primary)]">The Epistemology of the Machine</div>
             <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Systems Programming, Non-Determinism, and Undefined Behavior</div>
           </a>

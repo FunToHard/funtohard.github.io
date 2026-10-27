@@ -1,6 +1,6 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/ScholarlyHeader.astro';
+import Footer from '../components/ScholarlyFooter.astro';
 import SearchModal from '../components/SearchModal.astro';
 import WikiPreviewCard from '../components/WikiPreviewCard.astro';
 
@@ -24,7 +24,7 @@ const {
   canonicalUrl = Astro.url.href,
 } = Astro.props;
 
-const siteTitle = title.includes("funtohard") ? title : `${title} | funtohard philosophy`;
+const siteTitle = title.includes("funtohard") ? title : `${title} | funtohard / philosophy`;
 const absoluteImageUrl = new URL(image, Astro.site).href;
 
 // JSON-LD Structured Data
@@ -52,7 +52,7 @@ const jsonLd = type === 'article' ? {
 } : {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "funtohard philosophy",
+  "name": "funtohard / philosophy",
   "url": "https://funtohard.github.io",
   "description": description,
   "author": {
@@ -63,7 +63,7 @@ const jsonLd = type === 'article' ? {
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="obsidian" class="dark scroll-smooth">
+<html lang="en" data-theme="parchment" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,7 +86,7 @@ const jsonLd = type === 'article' ? {
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={absoluteImageUrl} />
-    <meta property="og:site_name" content="funtohard philosophy" />
+    <meta property="og:site_name" content="funtohard / philosophy" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -99,26 +99,20 @@ const jsonLd = type === 'article' ? {
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
     <!-- KaTeX CSS for rendered math & symbolic logic -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" />
-
-    <!-- Google Fonts: Newsreader (Editorial Serif), Cinzel (Classical Display), Inter (UI Sans), JetBrains Mono (Logic & Code) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/vendor/katex/katex.min.css" crossorigin="anonymous" />
 
     <!-- Inline script for zero-FOUC 3-Theme Management -->
     <script is:inline>
       (function() {
-        const savedTheme = localStorage.getItem('theme');
-        let theme = 'obsidian';
+        const savedTheme = localStorage.getItem('philosophy-theme');
+        let theme = 'parchment';
         if (savedTheme === 'parchment' || savedTheme === 'oxford' || savedTheme === 'obsidian') {
           theme = savedTheme;
         } else if (savedTheme === 'light') {
           theme = 'parchment';
         } else if (savedTheme === 'dark') {
           theme = 'obsidian';
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-          theme = 'parchment';
+
         }
         
         document.documentElement.setAttribute('data-theme', theme);
@@ -130,9 +124,10 @@ const jsonLd = type === 'article' ? {
       })();
     </script>
   </head>
-  <body class="bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans antialiased selection:bg-amber-500/20 selection:text-amber-500 min-h-screen flex flex-col transition-colors duration-200">
+  <body class="scholar-body">
+    <a class="scholar-skip" href="#scholar-main">Skip to content</a>
     <Header />
-    <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <main id="scholar-main" class:list={["scholar-main", {"scholar-article-main": type === "article"}]}>
       <slot />
     </main>
     <Footer />
@@ -579,6 +574,8 @@ const jsonLd = type === 'article' ? {
         background: var(--text-muted);
       }
     </style>
+
+    <link rel="stylesheet" href="/styles/philosophy.css" />
 
     <!-- Code Block Enhancement Script (Language Badge & Copy Button) -->
     <script is:inline>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R-mergency: The Academic Exam Cram Kit for R</title>
+    <meta name="description" content="A pragmatic, zero-fluff exam cram guide for students forced to take university tests in the R programming language. Learn just enough to pass and return to real software engineering." />
+    <link rel="stylesheet" href="/styles/editorial.css" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('rmergency_theme');
+          document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="font-sans antialiased min-h-screen">
+    <a class="study-skip" href="#study-content">Skip to study content</a>
+    <div id="app" class="flex flex-col min-h-screen"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

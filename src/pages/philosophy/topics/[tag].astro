@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allResearch = await getCollection('research', ({ data }) => !data.draft);
+  const allThoughts = await getCollection('thoughts', ({ data }) => !data.draft);
+
+  const allTags = new Set<string>();
+
+  [...allResearch, ...allThoughts].forEach((item) => {
+    item.data.tags.forEach((tag) => {
+      allTags.add(tag.toLowerCase().replace(/\s+/g, '-'));
+    });
+  });
+
+  return Array.from(allTags).map((tagSlug) => ({
+    params: { tag: tagSlug },
+  }));
+}
+
+const { tag } = Astro.params;
+
+const allResearch = await getCollection('research', ({ data }) => !data.draft);
+const allThoughts = await getCollection('thoughts', ({ data }) => !data.draft);
+
+const matchingResearch = allResearch.filter(r => 
+  r.data.tags.some(t => t.toLowerCase().replace(/\s+/g, '-') === tag)
+);
+
+const matchingThoughts = allThoughts.filter(t => 
+  t.data.tags.some(t => t.toLowerCase().replace(/\s+/g, '-') === tag)
+);
+
+const originalTagName = [...allResearch, ...allThoughts]
+  .flatMap(i => i.data.tags)
+  .find(t => t.toLowerCase().replace(/\s+/g, '-') === tag) || tag;
+
+const totalMatching = matchingResearch.length + matchingThoughts.length;
+
+const matching = [...matchingResearch, ...matchingThoughts].sort((a,b)=>b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+---
+
+<BaseLayout title={`${originalTagName} — Philosophy`} description={`Research and reflections concerning ${originalTagName}.`}>
+  <header class="archive-heading"><p class="scholar-label">Subject archive</p><h1>{originalTagName}.</h1><p>Research and reflections connected<br />through a shared field of inquiry.</p></header>
+  <div class="archive-toolbar"><span>{totalMatching} {totalMatching===1?'publication':'publications'}</span><a href="/philosophy/topics/">All subjects<img src="/icons/arrow-right.svg" alt="" /></a></div>
+  <div class="publication-list">{matching.map(item=><ArticleCard {...item.data} slug={item.slug} type={item.collection} />)}</div>
+</BaseLayout>

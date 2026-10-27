@@ -1,15 +1,19 @@
 {
-  "name": "funtohard-philosophy",
+  "name": "funtohard",
   "type": "module",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "R-mergency"
+  ],
   "scripts": {
     "dev": "astro dev --host",
+    "dev:rmergency": "npm run dev --workspace=r-mergency",
     "start": "astro dev --host",
-    "build:astro": "astro check && astro build",
-    "build:rmergency": "npm --prefix R-mergency run build",
-    "copy:rmergency": "node scripts/copy-rmergency.mjs",
-    "build": "npm run build:astro && npm run build:rmergency && npm run copy:rmergency && pagefind --site dist",
+    "build:astro": "astro check && astro build && node scripts/legacy-redirects.mjs",
+    "build:sub-apps": "node scripts/build-sub-apps.mjs",
+    "copy:sub-apps": "node scripts/sub-app-pipeline.mjs",
+    "build": "npm run build:astro && npm run build:sub-apps && npm run copy:sub-apps && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -1,0 +1,17 @@
+@import url('/fonts/google-fonts.css');
+
+:root {
+  --folio-paper: #fdfcfb;
+  --folio-ink: #21103f;
+  --folio-muted: #675c7e;
+  --folio-line: #d8d1e2;
+  --folio-accent: #ee4828;
+  --folio-wash: #f3f0f7;
+  --folio-display: 'Cormorant Garamond', Georgia, serif;
+  --folio-sans: 'Instrument Sans', Arial, sans-serif;
+}
+.folio-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; }
+:focus-visible { outline: 2px solid var(--folio-accent); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

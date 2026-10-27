@@ -1,0 +1,277 @@
+---
+const projects = [
+  {
+    id: 'r-mergency', number: '01', name: 'R-mergency', type: 'Software for learning',
+    subtitle: 'A little clarity before the exam.',
+    intro: 'Revision moves between understanding a concept, testing it, and looking up the detail that slips away. R-mergency brings those moments into one focused study environment.',
+    role: 'Interface design & development', scope: 'Seven languages. Three study modes.', stack: 'TypeScript / Vite / Tailwind',
+    live: '/R-mergency/', source: 'https://github.com/FunToHard/funtohard.github.io/tree/main/R-mergency',
+    decisions: [
+      { title: 'Give each task its own place.', text: 'A syllabus for understanding, practice for recall, and reference sheets for the last check. The navigation follows the way a study session changes.' },
+      { title: 'Let the lesson lead.', text: 'An editorial heading establishes the topic. The module index stays alongside the lesson, while code has its own high-contrast surface and independent scrolling.' },
+      { title: 'Make the exception visible.', text: 'Trap notes, answer explanations, and flagged review bring attention to the details most likely to be missed. Paper and ink themes support different reading preferences.' },
+    ],
+    architecture: 'R-mergency/src/\n  components/    Study views and controls\n  data/          Lessons, questions, reference\n  styles/        Study interface and themes\n  main.ts        State and navigation',
+    build: 'A small TypeScript application with separate lesson, practice, and reference views. Search connects the course content; browser storage remembers themes and flagged questions.',
+    buildNote: 'An npm workspace keeps the application independent in source while the root build assembles it at /R-mergency/. Static route entrypoints support direct links on GitHub Pages.',
+    images: [
+      { label: 'Syllabus', src: '/images/rmergency-study.png', alt: 'R-mergency course index, lesson typography, and code examples' },
+      { label: 'Practice', src: '/images/rmergency-drill.png', alt: 'R-mergency practice question with code and multiple-choice answers' },
+    ],
+  },
+  {
+    id: 'funtohard', number: '02', name: 'funtohard', type: 'A personal home on the web',
+    subtitle: 'Different disciplines. One address.',
+    intro: 'Software projects and philosophical research need room to speak in their own way. This site connects them through a shared identity, with an expressive showcase and dedicated reading and study environments.',
+    role: 'Visual direction & development', scope: 'Showcase / Research / Study tools', stack: 'Astro / TypeScript / npm workspaces',
+    live: '/', source: 'https://github.com/FunToHard/funtohard.github.io',
+    decisions: [
+      { title: 'Treat the page as a manuscript.', text: 'Expressive serif typography, a quiet technical sans, marginal notes, and layered product captures create an editorial composition with a clear underlying grid.' },
+      { title: 'Connect through a visual language.', text: 'Purple ink, paper surfaces, fine rules, and a restrained orange accent connect the showcase and study tool. Philosophy keeps its dedicated scholarly reading interface.' },
+      { title: 'Reveal the reasoning.', text: 'The homepage’s Read / Inspect control exposes notes about the composition and implementation. The work index adds context around the decisions behind the interfaces.' },
+    ],
+    architecture: 'src/pages/\n  index.astro    Personal showcase\n  work.astro     Selected work and context\n  philosophy/    Research and thoughts\nR-mergency/      Learning application\npublic/styles/   Shared visual tokens',
+    build: 'Astro renders the showcase and philosophy as static pages. Research and thoughts remain Markdown collections, with mathematical typesetting, citations, and search available in the reading experience.',
+    buildNote: 'One root build checks the Astro site, builds the learning workspace, assembles the output, and generates search indexes. Concrete HTML redirects preserve historical article links.',
+    images: [
+      { label: 'Homepage', src: '/images/showcase-desktop.png', alt: 'The funtohard homepage with expressive typography and layered project captures' },
+      { label: 'Mobile', src: '/images/showcase-mobile.png', alt: 'The funtohard homepage adapted to a narrow mobile screen' },
+    ],
+  },
+];
+const views = ['Overview', 'Design', 'Build'];
+const description = 'Selected design and software development work by funtohard. Explore the interfaces, decisions, and implementation behind each project.';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Work, in context — funtohard</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL('/work/', Astro.site)} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles/editorial.css" />
+    <meta property="og:title" content="Work, in context — funtohard" />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#fdfcfb" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to work</a>
+    <div class="work-shell">
+      <header class="work-header">
+        <a class="wordmark" href="/" aria-label="funtohard home"><span aria-hidden="true">f.</span>funtohard</a>
+        <nav aria-label="Main navigation"><a href="/work/" aria-current="page">Work</a><a href="/philosophy/">Thinking</a><a href="https://github.com/FunToHard">GitHub <img src="/icons/arrow-up-right.svg" alt="" /></a></nav>
+      </header>
+      <main id="main">
+        <section class="work-intro" aria-labelledby="page-title">
+          <div><p class="eyebrow">An index of design + development</p><h1 id="page-title">Work, <em>in context.</em></h1></div>
+          <p class="intro-note">The interface is one part of the story.<br /> Here are the questions, decisions,<br /> and systems behind it.</p>
+        </section>
+        <div class="index-rule"><span>Selected work</span><span>Two projects / An evolving index</span></div>
+        <div class="work-grid">
+          <aside class="project-index">
+            <div role="tablist" aria-label="Choose a project" aria-orientation="vertical" class="project-tabs">
+              {projects.map((project, i) => <button type="button" role="tab" id={`tab-${project.id}`} aria-controls={`project-${project.id}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1} data-project-tab={project.id}><span class="project-number">{project.number}</span><span><strong>{project.name}</strong><small>{project.type}</small></span><img src="/icons/arrow-right.svg" alt="" /></button>)}
+            </div>
+            <div class="index-note"><span class="eyebrow">A note in the margin</span><p>Look closer.<br />The decisions<br />are the work.</p></div>
+            <a class="back-link" href="/"><img src="/icons/arrow-right.svg" alt="" />Back to the introduction</a>
+          </aside>
+          <div class="case-studies">
+            {projects.map((project, index) => <article id={`project-${project.id}`} role="tabpanel" aria-labelledby={`tab-${project.id}`} data-project-panel={project.id} hidden={index !== 0} tabindex="0">
+              <div class="case-heading"><div><p class="eyebrow">{project.number} / {project.type}</p><h2>{project.name}<span class="accent">.</span></h2></div><div class="case-links"><a href={project.live}>Visit project<img src="/icons/arrow-up-right.svg" alt="" /></a><a href={project.source}>View source<img src="/icons/arrow-up-right.svg" alt="" /></a></div></div>
+              <div class="view-tabs" role="tablist" aria-label={`${project.name} case study views`}>
+                {views.map((view, i) => <button type="button" role="tab" id={`${project.id}-tab-${view.toLowerCase()}`} aria-controls={`${project.id}-${view.toLowerCase()}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1} data-view-tab={view.toLowerCase()}><span>{String(i + 1).padStart(2, '0')}</span>{view}</button>)}
+                <span class="reading-label" aria-hidden="true">A closer look</span>
+              </div>
+              <section role="tabpanel" id={`${project.id}-overview`} aria-labelledby={`${project.id}-tab-overview`} data-view-panel="overview" class="view-content" tabindex="0">
+                <h3>{project.subtitle}</h3><p class="case-intro">{project.intro}</p>
+                <dl class="project-facts"><div><dt>Contribution</dt><dd>{project.role}</dd></div><div><dt>Scope</dt><dd>{project.scope}</dd></div><div><dt>Made with</dt><dd>{project.stack}</dd></div></dl>
+              </section>
+              <section role="tabpanel" id={`${project.id}-design`} aria-labelledby={`${project.id}-tab-design`} data-view-panel="design" class="view-content design-view" hidden tabindex="0">
+                <h3>The decisions behind the interface.</h3>
+                <ol class="decisions">{project.decisions.map((decision, i) => <li><span>{String(i+1).padStart(2,'0')}</span><div><h4>{decision.title}</h4><p>{decision.text}</p></div></li>)}</ol>
+              </section>
+              <section role="tabpanel" id={`${project.id}-build`} aria-labelledby={`${project.id}-tab-build`} data-view-panel="build" class="view-content" hidden tabindex="0">
+                <h3>From composition to implementation.</h3><p class="case-intro">{project.build}</p><div class="build-layout"><pre aria-label={`${project.name} source structure`}><code>{project.architecture}</code></pre><div><p class="eyebrow">How it fits together</p><p>{project.buildNote}</p><a href={project.source} class="inline-link">Explore the repository<img src="/icons/arrow-up-right.svg" alt="" /></a></div></div>
+              </section>
+              <figure class="product-figure" data-gallery={project.id}>
+                <div class="figure-toolbar"><div role="group" aria-label={`${project.name} interface previews`}>{project.images.map((img, i) => <button type="button" data-image-src={img.src} data-image-alt={img.alt} aria-pressed={i === 0}>{img.label}</button>)}</div><button type="button" class="expand-preview" data-expand-preview aria-label={`Enlarge ${project.name} preview`}>Enlarge<img src="/icons/arrow-up-right.svg" alt="" /></button></div>
+                <div class="image-stage"><img class="product-image" src={project.images[0].src} alt={project.images[0].alt} width="1425" height="1089" loading={index === 0 ? 'eager' : 'lazy'} /></div>
+                <figcaption><span data-preview-caption>{project.images[0].label} / Working interface</span><span>Design + development by funtohard</span></figcaption>
+              </figure>
+              <div class="case-end"><p class="eyebrow">Continue the exploration</p><a href={project.live}>Use {project.name}<img src="/icons/arrow-right.svg" alt="" /></a></div>
+            </article>)}
+          </div>
+        </div>
+      </main>
+      <footer><a href="/">funtohard</a><p>Made to be considered. Built to be used.</p><a href="https://github.com/FunToHard">Source &amp; experiments<img src="/icons/arrow-up-right.svg" alt="" /></a></footer>
+    </div>
+    <dialog id="preview-dialog" aria-labelledby="preview-title"><div class="dialog-bar"><h2 id="preview-title">Interface preview</h2><button id="close-preview" type="button">Close <kbd>Esc</kbd></button></div><div class="dialog-image"><img id="expanded-image" alt="" /></div></dialog>
+    <script>
+      const projectTabs = [...document.querySelectorAll<HTMLButtonElement>('[data-project-tab]')];
+      const projectPanels = [...document.querySelectorAll<HTMLElement>('[data-project-panel]')];
+      const allowedViews = ['overview', 'design', 'build'];
+      const params = new URLSearchParams(location.search);
+      let currentProject = params.get('project') || 'r-mergency';
+      if (!projectTabs.some(tab => tab.dataset.projectTab === currentProject)) currentProject = 'r-mergency';
+      let currentView = params.get('view') || 'overview';
+      if (!allowedViews.includes(currentView)) currentView = 'overview';
+      function renderState(writeUrl = true) {
+        projectTabs.forEach(tab => { const active = tab.dataset.projectTab === currentProject; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
+        projectPanels.forEach(panel => {
+          panel.hidden = panel.dataset.projectPanel !== currentProject;
+          panel.querySelectorAll<HTMLButtonElement>('[data-view-tab]').forEach(tab => { const active = tab.dataset.viewTab === currentView; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
+          panel.querySelectorAll<HTMLElement>('[data-view-panel]').forEach(view => { view.hidden = view.dataset.viewPanel !== currentView; });
+        });
+        if (writeUrl) { const url = new URL(location.href); url.searchParams.set('project', currentProject); if (currentView === 'overview') url.searchParams.delete('view'); else url.searchParams.set('view', currentView); history.replaceState(null, '', url); }
+      }
+      function arrowNavigation(event: KeyboardEvent, tabs: HTMLButtonElement[]) {
+        const current = tabs.indexOf(event.currentTarget as HTMLButtonElement);
+        let next = current;
+        if (['ArrowRight','ArrowDown'].includes(event.key)) next = (current + 1) % tabs.length;
+        else if (['ArrowLeft','ArrowUp'].includes(event.key)) next = (current - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault(); tabs[next].click(); tabs[next].focus();
+      }
+      projectTabs.forEach(tab => { tab.addEventListener('click', () => { currentProject = tab.dataset.projectTab!; renderState(); const panel = document.querySelector<HTMLElement>(`[data-project-panel="${currentProject}"]`); if (panel && panel.getBoundingClientRect().top < 0) panel.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }); tab.addEventListener('keydown', event => arrowNavigation(event, projectTabs)); });
+      projectPanels.forEach(panel => {
+        const tabs = [...panel.querySelectorAll<HTMLButtonElement>('[data-view-tab]')];
+        tabs.forEach(tab => { tab.addEventListener('click', () => { currentView = tab.dataset.viewTab!; renderState(); }); tab.addEventListener('keydown', event => arrowNavigation(event, tabs)); });
+      });
+      const projectList = document.querySelector<HTMLElement>('.project-tabs')!;
+      const narrowScreen = matchMedia('(max-width: 760px)');
+      const updateOrientation = () => projectList.setAttribute('aria-orientation', narrowScreen.matches ? 'horizontal' : 'vertical');
+      narrowScreen.addEventListener('change', updateOrientation);
+      updateOrientation();
+      renderState(false);
+      const dialog = document.querySelector<HTMLDialogElement>('#preview-dialog')!;
+      const expandedImage = document.querySelector<HTMLImageElement>('#expanded-image')!;
+      document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(gallery => {
+        const image = gallery.querySelector<HTMLImageElement>('.product-image')!;
+        const imageButtons = [...gallery.querySelectorAll<HTMLButtonElement>('[data-image-src]')];
+        imageButtons.forEach(button => button.addEventListener('click', () => {
+          image.src = button.dataset.imageSrc!; image.alt = button.dataset.imageAlt!;
+          imageButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+          gallery.querySelector('[data-preview-caption]')!.textContent = `${button.textContent} / Working interface`;
+        }));
+        gallery.querySelector('[data-expand-preview]')?.addEventListener('click', () => {
+          expandedImage.src = image.src; expandedImage.alt = image.alt;
+          document.querySelector('#preview-title')!.textContent = image.alt;
+          dialog.showModal();
+        });
+      });
+      document.querySelector('#close-preview')?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
+    </script>
+  </body>
+</html>
+<style>
+  :global(html) { scroll-behavior: smooth; }
+  :global(body) { margin: 0; background: var(--folio-paper); color: var(--folio-ink); font-family: var(--folio-sans); -webkit-font-smoothing: antialiased; }
+  :global(*) { box-sizing: border-box; }
+  :global([hidden]) { display: none !important; }
+  :global(::selection) { background: #e9dff6; }
+  a { color: inherit; text-decoration: none; }
+  button { color: inherit; font: inherit; cursor: pointer; }
+  .work-shell { max-width: 1460px; padding: 0 64px; margin: auto; }
+  .work-header { height: 100px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--folio-line); }
+  .wordmark { display: flex; align-items: center; gap: 20px; font-size: 17px; font-weight: 600; letter-spacing: -.5px; }
+  .wordmark>span { font: 600 64px/.8 var(--folio-display); letter-spacing: -6px; }
+  .work-header nav { display: flex; gap: 35px; align-items: center; font-size: 13px; }
+  nav a, .case-links a, .inline-link, footer a:last-child { display: inline-flex; gap: 8px; align-items: center; }
+  .work-header nav a { min-height: 44px; }
+  nav a[aria-current] { border-bottom: 1px solid var(--folio-accent); }
+  nav a:hover { color: var(--folio-accent); }
+  img { max-width: 100%; }
+  nav img, .case-links img, .back-link img, .inline-link img, .expand-preview img, .case-end img, footer img { width: 16px; height: 16px; }
+  .eyebrow { font-size: 9px; text-transform: uppercase; letter-spacing: 1.9px; line-height: 1.8; font-weight: 500; margin: 0; }
+  .work-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; padding: 53px 0 43px; }
+  .work-intro .eyebrow { display: flex; align-items: center; gap: 15px; }
+  .work-intro .eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--folio-ink); }
+  h1 { font: 500 clamp(64px,7.7vw,110px)/.95 var(--folio-display); letter-spacing: -4.5px; margin: 22px 0 0; }
+  h1 em { font-weight: 500; }
+  .intro-note { font-size: 13px; line-height: 1.85; color: var(--folio-muted); margin: 0 0 5px; min-width: 260px; }
+  .index-rule { display: flex; justify-content: space-between; border-top: 1px solid var(--folio-line); border-bottom: 1px solid var(--folio-line); padding: 16px 0; font-size: 10px; }
+  .index-rule>span:last-child { color: var(--folio-muted); }
+  .work-grid { display: grid; grid-template-columns: 225px minmax(0,1fr); gap: 64px; padding: 36px 0 50px; }
+  .project-index { align-self: start; position: sticky; top: 28px; }
+  .project-tabs { display: flex; flex-direction: column; }
+  .project-tabs>button { display: grid; grid-template-columns: 22px minmax(0,1fr) 15px; align-items: baseline; gap: 10px; border: 0; border-top: 1px solid var(--folio-line); padding: 20px 0; background: none; text-align: left; }
+  .project-tabs>button:last-child { border-bottom: 1px solid var(--folio-line); }
+  .project-number { font-size: 9px; color: var(--folio-muted); }
+  .project-tabs strong { display: block; font: 600 27px/1 var(--folio-display); letter-spacing: -.7px; }
+  .project-tabs small { display: block; font-size: 10px; margin-top: 8px; color: var(--folio-muted); }
+  .project-tabs img { width: 15px; opacity: 0; transition: opacity .2s; }
+  .project-tabs>button[aria-selected=true] .project-number { color: var(--folio-accent); }
+  .project-tabs>button[aria-selected=true] img { opacity: 1; }
+  .project-tabs>button:hover strong { color: var(--folio-accent); }
+  .index-note { margin-top: 38px; border-left: 1px solid var(--folio-accent); padding-left: 16px; }
+  .index-note .eyebrow { font-size: 8px; color: var(--folio-muted); letter-spacing: 1.5px; }
+  .index-note>p { font: italic 500 30px/1.05 var(--folio-display); margin: 13px 0 0; }
+  .back-link { display: inline-flex; gap: 8px; font-size: 10px; color: var(--folio-muted); margin-top: 40px; align-items: center; min-height: 44px; }
+  .back-link img { transform: rotate(180deg); width: 13px; }
+  .case-studies { min-width: 0; }
+  [data-project-panel] { scroll-margin-top: 25px; }
+  article:focus-visible, [role=tabpanel]:focus-visible { outline-offset: 8px; }
+  .case-heading { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+  .case-heading h2 { font: 600 68px/.95 var(--folio-display); letter-spacing: -2.5px; margin: 14px 0 23px; }
+  .accent { color: var(--folio-accent); }
+  .case-links { display: flex; gap: 23px; font-size: 11px; padding-top: 18px; }
+  .case-links a { min-height: 44px; }
+  .case-links a:hover, .inline-link:hover { color: var(--folio-accent); }
+  .view-tabs { display: flex; align-items: stretch; gap: 30px; border-top: 1px solid var(--folio-line); border-bottom: 1px solid var(--folio-line); }
+  .view-tabs>button { display: flex; align-items: center; gap: 9px; background: none; border: 0; border-bottom: 2px solid transparent; padding: 15px 0 13px; font-size: 12px; color: var(--folio-muted); min-height: 47px; }
+  .view-tabs>button>span { font-size: 8px; }
+  .view-tabs>button[aria-selected=true] { color: var(--folio-ink); border-bottom-color: var(--folio-accent); }
+  .view-tabs>button[aria-selected=true]>span { color: var(--folio-accent); }
+  .reading-label { margin-left: auto; align-self: center; font-size: 9px; font-style: italic; color: var(--folio-muted); }
+  .view-content { padding: 28px 0 26px; }
+  .view-content h3 { font: 500 34px/1.1 var(--folio-display); letter-spacing: -.7px; margin: 0 0 15px; }
+  .case-intro { font-size: 14px; line-height: 1.85; color: var(--folio-muted); margin: 0; max-width: 700px; }
+  .project-facts { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 24px; margin: 26px 0 0; }
+  dt { font-size: 8px; text-transform: uppercase; letter-spacing: 1.4px; color: var(--folio-muted); margin-bottom: 8px; }
+  dd { margin: 0; font-size: 11px; line-height: 1.65; }
+  .decisions { list-style: none; padding: 0; margin: 23px 0 0; }
+  .decisions li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; padding: 17px 0; border-bottom: 1px solid var(--folio-line); }
+  .decisions li:last-child { border: 0; padding-bottom: 0; }
+  .decisions li>span { font-size: 9px; color: var(--folio-accent); margin-top: 4px; }
+  .decisions h4 { font-size: 14px; font-weight: 500; margin: 0 0 7px; }
+  .decisions p { color: var(--folio-muted); font-size: 13px; line-height: 1.8; margin: 0; max-width: 680px; }
+  .build-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; margin-top: 25px; align-items: start; }
+  pre { margin: 0; background: var(--folio-wash); border-left: 1px solid var(--folio-line); padding: 22px 18px; font: 11px/1.9 ui-monospace, monospace; overflow-x: auto; }
+  .build-layout>div>p:not(.eyebrow) { font-size: 12px; color: var(--folio-muted); line-height: 1.85; margin-top: 10px; }
+  .inline-link { font-size: 11px; padding: 10px 0; border-bottom: 1px solid var(--folio-line); }
+  .product-figure { margin: 5px 0 0; }
+  .figure-toolbar { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--folio-line); padding: 0 15px; gap: 15px; }
+  .figure-toolbar>div { display: flex; gap: 20px; }
+  .figure-toolbar button { min-height: 44px; padding: 0; background: none; border: 0; font-size: 10px; color: var(--folio-muted); }
+  .figure-toolbar button[aria-pressed=true] { color: var(--folio-ink); text-decoration: underline; text-underline-offset: 5px; }
+  .expand-preview { display: inline-flex; align-items: center; gap: 8px; }
+  .expand-preview img { width: 13px; }
+  .image-stage { background: var(--folio-wash); border: 1px solid var(--folio-line); border-top: 0; height: 510px; overflow: hidden; padding: 20px; display: flex; align-items: flex-start; justify-content: center; }
+  .product-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center top; }
+  figcaption { display: flex; justify-content: space-between; gap: 20px; color: var(--folio-muted); font-size: 9px; padding-top: 12px; }
+  .case-end { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--folio-line); margin-top: 35px; padding-top: 20px; gap: 25px; }
+  .case-end .eyebrow { color: var(--folio-muted); font-size: 8px; }
+  .case-end>a { display: flex; align-items: center; gap: 18px; font: italic 500 27px var(--folio-display); min-height: 44px; }
+  footer { border-top: 1px solid var(--folio-line); padding: 23px 0 28px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; gap: 20px; }
+  footer p { margin: 0; color: var(--folio-muted); }
+  footer img { width: 14px; }
+  dialog { width: min(1200px, calc(100vw - 50px)); max-height: 90vh; border: 1px solid var(--folio-line); background: var(--folio-paper); color: var(--folio-ink); padding: 0; }
+  dialog::backdrop { background: #21103fbc; }
+  .dialog-bar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 12px 20px; border-bottom: 1px solid var(--folio-line); position: sticky; top: 0; background: var(--folio-paper); }
+  .dialog-bar h2 { font-size: 12px; font-weight: 400; margin: 0; max-width: 75%; line-height: 1.6; }
+  .dialog-bar button { border: 0; background: none; min-height: 44px; font-size: 12px; }
+  kbd { margin-left: 8px; font-size: 9px; color: var(--folio-muted); }
+  .dialog-image { padding: 20px; background: var(--folio-wash); text-align: center; }
+  .dialog-image img { max-width: 100%; height: auto; display: inline-block; }
+  .skip { position: fixed; top: -80px; left: 20px; z-index: 10; background: var(--folio-ink); color: white; padding: 12px; }
+  .skip:focus { top: 10px; }
+  @media(max-width:1100px) { .work-shell { padding: 0 35px; } .work-grid { grid-template-columns: 190px minmax(0,1fr); gap: 36px; } .work-intro { gap: 30px; } h1 { font-size: 83px; } .intro-note { min-width: 220px; font-size: 12px; } .case-links { flex-direction: column; gap: 0; align-items: flex-end; padding-top: 0; } .case-links a { min-height: 32px; } .case-heading h2 { font-size: 59px; } .project-facts { gap: 18px; } .image-stage { height: 420px; } }
+  @media(max-width:760px) { .work-shell { padding: 0 23px; } .work-header { height: 85px; } .wordmark { font-size: 14px; gap: 13px; } .wordmark>span { font-size: 52px; } .work-header nav { font-size: 12px; gap: 20px; } .work-intro { display: block; padding: 37px 0 30px; } h1 { font-size: 76px; letter-spacing: -3px; } .intro-note { margin-top: 23px; font-size: 13px; } .intro-note br { display: none; } .index-rule>span:last-child { font-size: 9px; } .work-grid { grid-template-columns: 1fr; gap: 28px; padding-top: 18px; } .project-index { position: static; } .project-tabs { flex-direction: row; gap: 22px; border-bottom: 1px solid var(--folio-line); } .project-tabs>button { width: 50%; border: 0; padding: 13px 0 17px; grid-template-columns: 18px 1fr 13px; gap: 5px; border-bottom: 2px solid transparent; } .project-tabs>button:last-child { border-bottom: 2px solid transparent; } .project-tabs>button[aria-selected=true] { border-bottom-color: var(--folio-accent); } .project-tabs strong { font-size: 27px; } .project-tabs small { font-size: 9px; line-height: 1.5; margin-top: 5px; } .index-note, .back-link { display: none; } .case-heading h2 { font-size: 58px; } .case-links { font-size: 11px; } .case-links a { min-height: 44px; } .project-facts { gap: 20px; } .build-layout { grid-template-columns: 1fr; gap: 22px; } .image-stage { height: 430px; padding: 12px; } .reading-label { font-size: 8px; } .view-content { padding-top: 24px; } .case-end .eyebrow { max-width: 100px; } footer { flex-wrap: wrap; } footer p { order: 3; width: 100%; } }
+  @media(max-width:450px) { .work-header nav { gap: 16px; font-size: 11px; } nav img { width: 12px; } .eyebrow { font-size: 8px; letter-spacing: 1.5px; } h1 { font-size: 64px; line-height: .92; max-width: 340px; } h1 em { display: block; margin-top: 7px; } .project-tabs { gap: 17px; } .project-tabs strong { font-size: 25px; } .case-heading h2 { font-size: 52px; margin-bottom: 20px; } .case-links { gap: 1px; font-size: 10px; } .case-links img { width: 13px; } .case-heading { gap: 15px; } .case-heading .eyebrow { max-width: 200px; } .view-tabs { gap: 24px; } .reading-label { display: none; } .view-content h3 { font-size: 32px; } .case-intro { font-size: 13px; } .project-facts { grid-template-columns: 1fr 1fr; gap: 18px; } .project-facts>div:last-child { grid-column: 1/-1; } dd { font-size: 11px; } .image-stage { height: 310px; padding: 9px; } figcaption { font-size: 8px; gap: 15px; line-height: 1.6; } figcaption>span:last-child { max-width: 120px; text-align: right; } .decisions p { font-size: 12px; } .decisions h4 { line-height: 1.5; } .case-end>a { font-size: 25px; } dialog { width: calc(100vw - 24px); } .dialog-bar { padding: 7px 12px; } .dialog-bar h2 { font-size: 10px; } .dialog-image { padding: 8px; } }
+</style>

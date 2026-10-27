@@ -1,0 +1,32 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  {label: 'Research', href:'/philosophy/research/', active:path.includes('/research') || path.replace(/\/$/,'') === '/philosophy'},
+  {label: 'Thoughts', href:'/philosophy/thoughts/', active:path.includes('/thoughts')},
+  {label: 'Subjects', href:'/philosophy/topics/', active:path.includes('/topics')},
+];
+---
+<header id="scholar-header" class="scholar-header">
+  <a class="scholar-brand" href="/philosophy/"><strong>funtohard</strong><span>/ philosophy</span><small>Independent research &amp; notes</small></a>
+  <nav aria-label="Philosophy navigation">{links.map(link => <a href={link.href} aria-current={link.active ? 'page' : undefined}>{link.label}</a>)}</nav>
+  <div class="scholar-header-actions">
+    <button id="search-trigger-btn" type="button" aria-label="Search philosophy publications"><img src="/icons/magnifying-glass.svg" alt="" /><span>Search</span></button>
+    <details id="scholar-preferences"><summary><span aria-hidden="true">Aa</span> Reading preferences</summary><div class="scholar-preferences-panel"><p>Reading theme</p><button data-scholar-theme="parchment" aria-pressed="true">Paper</button><button data-scholar-theme="obsidian" aria-pressed="false">Night</button><button data-scholar-theme="oxford" aria-pressed="false">Contrast</button><p class="preference-help">Article pages include font, size, and focus controls.</p></div></details>
+    <a href="/" class="scholar-portfolio">Portfolio<img src="/icons/arrow-up-right.svg" alt="" /></a>
+  </div>
+</header>
+<script>
+  const preferences = document.querySelector<HTMLDetailsElement>('#scholar-preferences');
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-scholar-theme]');
+  const applyTheme = (theme: string, save = true) => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.classList.toggle('dark', theme !== 'parchment');
+    themeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.scholarTheme === theme)));
+    if (save) { try { localStorage.setItem('philosophy-theme', theme); } catch {} }
+  };
+  applyTheme(document.documentElement.dataset.theme || 'parchment', false);
+  themeButtons.forEach(button => button.addEventListener('click', () => { applyTheme(button.dataset.scholarTheme!); if (preferences) preferences.open = false; }));
+  document.querySelector('#search-trigger-btn')?.addEventListener('click', () => window.dispatchEvent(new Event('scholar:search')));
+  document.addEventListener('click', event => { if (preferences?.open && !preferences.contains(event.target as Node)) preferences.open = false; });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && preferences?.open) { preferences.open = false; preferences.querySelector('summary')?.focus(); } });
+</script>
